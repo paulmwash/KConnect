@@ -9,7 +9,7 @@ import (
 )
 
 type students struct {
-  name string `json:"Name"`
+  Name string `json:"name"`
   ID string    `json:"ID"`
 }
 
@@ -45,9 +45,9 @@ w.Write([]byte(http.StatusText(http.StatusOK)))
 }
 
 func(s *students) getThem(w http.ResponseWriter, r *http.Request) {
-  w.Header().Set("Content-Type", "encoding/json")
+  w.Header().Set("Content-Type", "application/json")
   w.WriteHeader(http.StatusOK)
-  json.Encoder(w).NewEncode(r)
+  json.NewEncoder(w).Encode(r)
 }
 
 
@@ -57,6 +57,10 @@ const filepathroot = "."
 const port = "8080"
 
 apiCfg := &apiConfig{}
+  stud := &students {
+    Name : "Paul",
+    ID : "KLH545",
+  }
 
 
 mux := http.NewServeMux()
