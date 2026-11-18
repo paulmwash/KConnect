@@ -5,8 +5,13 @@ import (
   "net/http"
   "fmt"
   "sync/atomic"
+  "encoding/json"
 )
 
+type students struct {
+  name string `json:"Name"`
+  ID string    `json:"ID"`
+}
 
 type apiConfig struct {
 fileserverHits atomic.Int32
@@ -39,6 +44,12 @@ w.WriteHeader(http.StatusOK)
 w.Write([]byte(http.StatusText(http.StatusOK)))
 }
 
+func(s *students) getThem(w http.ResponseWriter, r *http.Request) {
+  w.Header().Set("Content-Type", "encoding/json")
+  w.WriteHeader(http.StatusOK)
+  json.Encoder(w).NewEncode(r)
+}
+
 
 func main() {
 
@@ -54,7 +65,8 @@ Addr: ":" + port,
 Handler: mux,
 }
 mux.Handle("/app/", apiCfg.middlewareMetricsInc(http.StripPrefix("/app",http.FileServer(http.Dir(filepathroot)))))
-
+mux.Handle("healthz",apiCfg.middlewareMetricsInc(http.HandleFunc(apiCfg.handleMetrics)))
+  
 mux.HandleFunc("/healthz",handleReadiness)
 mux.HandleFunc("/metrics", apiCfg.handleMetrics)
 mux.HandleFunc("/reset", apiCfg.handlerReset)
