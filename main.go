@@ -55,11 +55,11 @@ Handler: mux,
 }
 fsHandler := apiCfg.middlewareMetricsInc(http.StripPrefix("/app",http.FileServer(http.Dir(filepathroot))))
 mux.Handle("/app/",fsHandler)
-handler := http.StripPrefix("/app", http.FileServer(http.Dir(filepathroot)))
+//handler := http.StripPrefix("/app", http.FileServer(http.Dir(filepathroot)))
 
 //mux.Handle("/app/",http.StripPrefix("/app/",http.FileServer((http.Dir(filepathroot)))))
 mux.HandleFunc("/healthz",handleReadiness)
-mux.Handle("/app/",apiCfg.middlewareMetricsInc(handler))
+//mux.Handle("/app/",apiCfg.middlewareMetricsInc(handler))
 mux.HandleFunc("/metrics", apiCfg.handleMetrics)
 mux.HandleFunc("/reset", apiCfg.handlerReset)
 
