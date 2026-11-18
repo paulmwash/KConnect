@@ -69,7 +69,7 @@ Addr: ":" + port,
 Handler: mux,
 }
 mux.Handle("/app/", apiCfg.middlewareMetricsInc(http.StripPrefix("/app",http.FileServer(http.Dir(filepathroot)))))
-mux.Handle("/student",apiCfg.middlewareMetricsInc(http.HandleFunc(stud.getThem)))
+mux.Handle("/student",apiCfg.middlewareMetricsInc(http.HandlerFunc(stud.getThem)))
 //mux.Handle("healthz",apiCfg.middlewareMetricsInc(http.HandleFunc(apiCfg.handleMetrics)))
   
 mux.HandleFunc("/healthz",handleReadiness)
