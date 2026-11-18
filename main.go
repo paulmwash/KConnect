@@ -10,7 +10,11 @@ type apiConfig struct {
 fileserverHits atomic.Int32
 }
 
-func 
+func(cfg *apiConfig) middlewareMetricsInc(next http.Handler) http.Handler {
+return http.HandleFunc(func ( w http.ResponseWriter, r *http.Request) {
+cfg.fileserverHits.Add(1)
+next.ServerHTTP(w,r)
+}
 
 
 func handleReadiness(w http.ResponseWriter, r *http.Request) {
@@ -32,6 +36,7 @@ Handler: mux,
 }
 mux.Handle("/app/",http.StripPrefix("/app/",http.FileServer((http.Dir(filepathroot)))))
 mux.HandleFunc("/healthz",handleReadiness)
+mux.Handle("/app/",middlwareMetricsInc(handler))
 
 log.Println("Starting server on  :8080...")
 
