@@ -53,9 +53,7 @@ srv := &http.Server{
 Addr: ":" + port,
 Handler: mux,
 }
-fsHandler := apiCfg.middlewareMetricsInc(http.StripPrefix("/app",http.FileServer(http.Dir(filepathroot))))
-mux.Handle("/app/",fsHandler)
-//handler := http.StripPrefix("/app", http.FileServer(http.Dir(filepathroot)))
+mux.Handle("/app/", apiCfg.middlewareMetricsInc(http.StripPrefix("/app",http.FileServer(http.Dir(filepathroot)))))
 
 mux.HandleFunc("/healthz",handleReadiness)
 mux.HandleFunc("/metrics", apiCfg.handleMetrics)
