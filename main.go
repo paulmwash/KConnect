@@ -38,8 +38,11 @@ w.Write([]byte(http.StatusText(http.StatusOK)))
 
 
 func main() {
+
 const filepathroot = "."
 const port = "8080"
+
+apiCfg := &apiConfig{}
 
 
 mux := http.NewServeMux()
@@ -47,9 +50,12 @@ srv := &http.Server{
 Addr: ":" + port,
 Handler: mux,
 }
+
 mux.Handle("/app/",http.StripPrefix("/app/",http.FileServer((http.Dir(filepathroot)))))
 mux.HandleFunc("/healthz",handleReadiness)
 mux.Handle("/app/",middlwareMetricsInc(handler))
+mux.HandleFunc("/metrics", apiCfg.handleMetrics)
+mux.HandleFunc("/reset", apiCfg.handleReset)
 
 log.Println("Starting server on  :8080...")
 
