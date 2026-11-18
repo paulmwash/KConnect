@@ -47,7 +47,7 @@ w.Write([]byte(http.StatusText(http.StatusOK)))
 func(s *students) getThem(w http.ResponseWriter, r *http.Request) {
   w.Header().Set("Content-Type", "application/json")
   w.WriteHeader(http.StatusOK)
-  json.NewEncoder(w).Encode(r)
+  json.NewEncoder(w).Encode(s)
 }
 
 
@@ -69,7 +69,8 @@ Addr: ":" + port,
 Handler: mux,
 }
 mux.Handle("/app/", apiCfg.middlewareMetricsInc(http.StripPrefix("/app",http.FileServer(http.Dir(filepathroot)))))
-mux.Handle("healthz",apiCfg.middlewareMetricsInc(http.HandleFunc(apiCfg.handleMetrics)))
+mux.Handle("/student",apiCfg.middlewareMetricsInc(http.HandleFunc(stud.getThem)))
+//mux.Handle("healthz",apiCfg.middlewareMetricsInc(http.HandleFunc(apiCfg.handleMetrics)))
   
 mux.HandleFunc("/healthz",handleReadiness)
 mux.HandleFunc("/metrics", apiCfg.handleMetrics)
