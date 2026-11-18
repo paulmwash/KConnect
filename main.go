@@ -68,9 +68,11 @@ srv := &http.Server{
 Addr: ":" + port,
 Handler: mux,
 }
+
+  //Regest site visits
 mux.Handle("/app/", apiCfg.middlewareMetricsInc(http.StripPrefix("/app",http.FileServer(http.Dir(filepathroot)))))
 mux.Handle("/student",apiCfg.middlewareMetricsInc(http.HandlerFunc(stud.getThem)))
-//mux.Handle("healthz",apiCfg.middlewareMetricsInc(http.HandleFunc(apiCfg.handleMetrics)))
+//mux.Handle("healthz",apiCfg.middlewareMetricsInc(http.HandlerFunc(apiCfg.handleMetrics))) // Admin should not be recorded
   
 mux.HandleFunc("/healthz",handleReadiness)
 mux.HandleFunc("/metrics", apiCfg.handleMetrics)
