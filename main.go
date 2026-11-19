@@ -25,9 +25,17 @@ next.ServeHTTP(w,r)
 }
 
 func(cfg *apiConfig) handleMetrics( w http.ResponseWriter, r *http.Request) {
-w.Header().Set("Content-Type", "text/plain; charset=utf-8")
+w.Header().Set("Content-Type", "text/html")
 w.WriteHeader(http.StatusOK)
-w.Write([]byte(fmt.Sprintf("Hits: %d", cfg.fileserverHits.Load())))
+html := fmt.Sprintf(`
+<html>
+<body>
+<h1>Welcome, Chirpy Admin</h1>
+<p>Chirpy has been visited %d times !</p>
+</body>
+</html>`,cfg.fileserverHits.Load())
+w.Write([]byte(html))
+
 }
 
 func(cfg *apiConfig) handlerReset(w http.ResponseWriter, r *http.Request) {
@@ -76,7 +84,7 @@ mux.Handle("/student",apiCfg.middlewareMetricsInc(http.HandlerFunc(stud.getThem)
   
 mux.HandleFunc("GET /api/healthz",handleReadiness)
 mux.HandleFunc("GET /admin/metrics", apiCfg.handleMetrics)
-mux.HandleFunc("POST /api/reset", apiCfg.handlerReset)
+mux.HandleFunc("POST /admin/reset", apiCfg.handlerReset)
 
 log.Println("Starting server on  :8080...")
 
