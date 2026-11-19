@@ -74,9 +74,9 @@ mux.Handle("/app/", apiCfg.middlewareMetricsInc(http.StripPrefix("/app",http.Fil
 mux.Handle("/student",apiCfg.middlewareMetricsInc(http.HandlerFunc(stud.getThem)))
 //mux.Handle("healthz",apiCfg.middlewareMetricsInc(http.HandlerFunc(apiCfg.handleMetrics))) // Admin should not be recorded
   
-mux.HandleFunc("GET/healthz",handleReadiness)
-mux.HandleFunc("GET/metrics", apiCfg.handleMetrics)
-mux.HandleFunc("POST/reset", apiCfg.handlerReset)
+mux.HandleFunc("GET /api/healthz",handleReadiness)
+mux.HandleFunc("GET /admin/metrics", apiCfg.handleMetrics)
+mux.HandleFunc("POST /api/reset", apiCfg.handlerReset)
 
 log.Println("Starting server on  :8080...")
 
